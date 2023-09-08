@@ -55,9 +55,32 @@ public class UserController {
         UserModel authenticated = userService.authenticate(userModel.getUsername(), userModel.getPassword());
         if (authenticated != null ){
             model.addAttribute("userLogin", authenticated.getUsername());
-            return "account_page";
+
+            // Determine the user's role and redirect accordingly
+            if (authenticated.getRoles().stream().anyMatch(role -> role.getName().equals("SELLER"))) {
+                return "seller";
+            } else if (authenticated.getRoles().stream().anyMatch(role -> role.getName().equals("CUSTOMER"))) {
+                return "customer";
+            } else {
+                // Handle other roles or scenarios here
+                return "error_page";
+            }
+            // TODO: check role & decide where to redirect!
+
         } else {
             return "error_page";
         }
+    }
+
+    @GetMapping("/seller")
+    public String sellerDashboard(Model model) {
+        // Add seller-specific logic here
+        return "seller_page"; // Return the seller dashboard view
+    }
+
+    @GetMapping("/customer")
+    public String buyerDashboard(Model model) {
+        // Add buyer-specific logic here
+        return "customer"; // Return the buyer dashboard view
     }
 }

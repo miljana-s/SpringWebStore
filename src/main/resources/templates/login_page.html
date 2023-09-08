@@ -13,6 +13,7 @@
 <div class="login-page">
     <div class="form">
         <form class="login-form" method="post" action="/login" th:object="${loginRequest}">
+            <input type="hidden" th:attr="name='_csrf'" th:value="${_csrf.token}" />
             <input type="text" name="username" placeholder="username"/>
             <input type="password" name="password" placeholder="password"/>
             <button>login</button>

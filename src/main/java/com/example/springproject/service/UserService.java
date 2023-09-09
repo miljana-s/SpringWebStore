@@ -5,14 +5,18 @@ import com.example.springproject.model.UserModel;
 import com.example.springproject.repository.RoleRepository;
 import com.example.springproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
-
     private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
@@ -33,7 +37,7 @@ public class UserService {
             userModel.setFirstName(firstName);
             userModel.setLastName(lastName);
             userModel.setUsername(username);
-            userModel.setPassword(password);
+            userModel.setPassword(encoder.encode(password));
             userModel.setEmail(email);
             userModel.setPhone(phone);
             userModel.setAddress(address);
@@ -44,6 +48,16 @@ public class UserService {
 
             return userRepository.save(userModel);
         }
+    }
+
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) {
+                return userRepository.findFirstByUsername(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+            }
+        };
     }
 
     public UserModel authenticate(String username, String password){

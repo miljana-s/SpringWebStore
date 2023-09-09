@@ -2,7 +2,11 @@ package com.example.springproject.controller;
 
 import com.example.springproject.model.UserModel;
 import com.example.springproject.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,12 +69,18 @@ public class UserController {
             } else if (authenticated.getRoles().stream().anyMatch(role -> role.getName().equals("CUSTOMER"))) {
                 return "products";
             }
-//            model.addAttribute("user", authenticated);
-//            return "redirect:/products";
         }
         else {
             model.addAttribute("displayLoginError", true);
         }
         return "login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        if (authentication != null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+        return "redirect:/"; // Redirect to the home page
     }
 }

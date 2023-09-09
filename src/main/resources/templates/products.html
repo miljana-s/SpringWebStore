@@ -54,7 +54,7 @@
 <!--                                    Home-->
 <!--                                </a>-->
 <!--                            </li>-->
-                            <li>
+                            <li sec:authorize="hasRole('SELLER')">
                                 <a href="#" class="nav-link text-white">
                                     <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#plus-square"/></svg>
                                     Add
@@ -95,16 +95,17 @@
                     </form>
 
                     <div class="text-end">
-                        <button type="button" class="btn btn-light text-dark me-2"
-                                sec:authorize="isAuthenticated()"
-                                th:href="@{/logout}">
-                            Logout
-                        </button>
+                        <form action="/logout">
+                            <button type="button" class="btn btn-light text-dark me-2">
+<!--                                    sec:authorize="isAuthenticated()">-->
+                                Logout
+                            </button>
+                        </form>
+                        <a href="/logout">Logout</a>
                     </div>
                 </div>
             </div>
         </header>
-
     </main>
 </body>
 </html>

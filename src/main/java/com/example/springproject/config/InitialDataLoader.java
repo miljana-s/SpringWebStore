@@ -3,6 +3,7 @@ package com.example.springproject.config;
 import com.example.springproject.model.UserModel;
 import com.example.springproject.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import com.example.springproject.model.RoleModel;
 import com.example.springproject.repository.RoleRepository;
@@ -12,6 +13,7 @@ public class InitialDataLoader implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public InitialDataLoader(RoleRepository roleRepository, UserRepository userRepository) {
         this.roleRepository = roleRepository;
@@ -33,7 +35,7 @@ public class InitialDataLoader implements CommandLineRunner {
         customer.setFirstName("John");
         customer.setLastName("Doe");
         customer.setUsername("user");
-        customer.setPassword("123");
+        customer.setPassword(encoder.encode("123"));
         customer.setEmail("customer@example.com");
         customer.setPhone("064581154");
         customer.setAddress("StreetCust");
@@ -50,7 +52,7 @@ public class InitialDataLoader implements CommandLineRunner {
         seller.setFirstName("Jane");
         seller.setLastName("Smith");
         seller.setUsername("seller");
-        seller.setPassword("123");
+        seller.setPassword(encoder.encode("123"));
         seller.setEmail("seller@example.com");
         seller.setPhone("0626897145");
         seller.setAddress("StreetSell");

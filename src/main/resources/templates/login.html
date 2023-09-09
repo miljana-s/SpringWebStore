@@ -11,8 +11,8 @@
 </head>
 <body>
 <div class="login-page">
-    <div class="alert alert-danger" role="alert" th:if="${displayLoginError}">
-        Invalid username or password! Try again.
+    <div class="alert alert-danger" role="alert" th:if="${displayLoginError != null}">
+        <p th:text="#{displayLoginError}"></p>
     </div>
 
     <div class="form">

@@ -33,7 +33,6 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute UserModel userModel, Model model){
-//        System.out.println("register request: " + userModel);
         UserModel registeredUser =
                 userService.registerUser(
                         userModel.getFirstName(),
@@ -57,36 +56,21 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(@ModelAttribute UserModel userModel, Model model){
-//        System.out.println("login request: " + userModel);
         UserModel authenticated = userService.authenticate(userModel.getUsername(), userModel.getPassword());
         if (authenticated != null ){
             // model.addAttribute("userLogin", authenticated.getUsername()); --> <span th:text="${userLogin}"></span>
-
             // Determine the user's role and redirect accordingly
             if (authenticated.getRoles().stream().anyMatch(role -> role.getName().equals("SELLER"))) {
-                return "seller";
+                return "products";
             } else if (authenticated.getRoles().stream().anyMatch(role -> role.getName().equals("CUSTOMER"))) {
-                return "customer";
+                return "products";
             }
-//            else { --> case for users without roles!
-//                model.addAttribute("displayLoginError", true);
-//            }
+//            model.addAttribute("user", authenticated);
+//            return "redirect:/products";
         }
         else {
             model.addAttribute("displayLoginError", true);
         }
         return "login";
-    }
-
-    @GetMapping("/seller")
-    public String sellerDashboard(Model model) {
-        // Add seller-specific logic here
-        return "seller_page"; // Return the seller dashboard view
-    }
-
-    @GetMapping("/customer")
-    public String buyerDashboard(Model model) {
-        // Add buyer-specific logic here
-        return "customer"; // Return the buyer dashboard view
     }
 }

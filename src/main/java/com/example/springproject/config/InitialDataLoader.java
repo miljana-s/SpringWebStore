@@ -32,8 +32,8 @@ public class InitialDataLoader implements CommandLineRunner {
         UserModel customer = new UserModel();
         customer.setFirstName("John");
         customer.setLastName("Doe");
-        customer.setUsername("customer1");
-        customer.setPassword("pass123");
+        customer.setUsername("user");
+        customer.setPassword("123");
         customer.setEmail("customer@example.com");
         customer.setPhone("064581154");
         customer.setAddress("StreetCust");
@@ -49,8 +49,8 @@ public class InitialDataLoader implements CommandLineRunner {
         UserModel seller = new UserModel();
         seller.setFirstName("Jane");
         seller.setLastName("Smith");
-        seller.setUsername("seller1");
-        seller.setPassword("pass111");
+        seller.setUsername("seller");
+        seller.setPassword("123");
         seller.setEmail("seller@example.com");
         seller.setPhone("0626897145");
         seller.setAddress("StreetSell");

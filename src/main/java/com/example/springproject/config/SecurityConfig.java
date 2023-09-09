@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Order(1)
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -19,13 +19,28 @@ public class SecurityConfig {
     public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                        .requestMatchers("/**").permitAll() // Allow access without authentication)
-                        .requestMatchers("/register").permitAll() // Allow access without authentication)
-                        .requestMatchers("/login").permitAll() // Allow access without authentication)
+                        .requestMatchers("/**").permitAll() // Allow access without authentication
+                        .requestMatchers("/register").permitAll() // Allow access without authentication
+                        .requestMatchers("/login").permitAll() // Allow access without authentication
+//                        .requestMatchers("/products").hasAnyRole("SELLER", "CUSTOMER")
+                        .requestMatchers("/products").hasRole("SELLER")
                         .requestMatchers("/seller/**").hasRole("SELLER") // Seller role access
                         .requestMatchers("/customer/**").hasRole("CUSTOMER")   // Buyer role access
                         .anyRequest().authenticated()
-                );
+                )
+                /*.formLogin(loginConfigurer ->
+                        loginConfigurer
+                                .loginPage("/login")
+                                .defaultSuccessUrl("/products") // Specify the default success URL
+                                .failureUrl("/error")           // Specify the failure URL
+                                .permitAll()
+                )
+                .logout(logoutConfigurer ->
+                        logoutConfigurer
+                                .logoutUrl("/logout")
+                                .logoutSuccessUrl("/")
+                                .permitAll()
+                )*/;
         return http.build();
     }
 }

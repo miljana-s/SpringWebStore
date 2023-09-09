@@ -25,40 +25,7 @@ public class SecurityConfig {
                         .requestMatchers("/seller/**").hasRole("SELLER") // Seller role access
                         .requestMatchers("/customer/**").hasRole("CUSTOMER")   // Buyer role access
                         .anyRequest().authenticated()
-                )
-                /*.formLogin(loginConfigurer ->
-                        loginConfigurer
-                                .loginPage("/login")
-                                .permitAll()
-                )
-                .httpBasic(httpBasicConfigurer ->
-                        httpBasicConfigurer.realmName("My Realm")
-                )
-                .logout(logoutConfigurer ->
-                        logoutConfigurer
-                                .logoutUrl("/logout")
-                                .logoutSuccessUrl("/")
-                                .permitAll()
-                )*/;
-
+                );
         return http.build();
     }
-
-    /*@Bean
-    public InMemoryUserDetailsManager userDetailsManager() {
-        UserDetails seller = User
-                .withUsername("seller")
-                .password("{noop}sellerpass")
-                .roles("SELLER")
-                .build();
-
-
-        UserDetails customer = User
-                .withUsername("customer")
-                .password("{noop}buypass")
-                .roles("CUSTOMER")
-                .build();
-
-        return new InMemoryUserDetailsManager(seller, customer);
-    }*/
 }

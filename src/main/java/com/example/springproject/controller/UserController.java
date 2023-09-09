@@ -22,18 +22,18 @@ public class UserController {
     @GetMapping("/register")
     public String getRegisterPage(Model model){
         model.addAttribute("registerRequest", new UserModel());
-        return "register_page";
+        return "registration";
     }
 
     @GetMapping("/login")
     public String getLoginPage(Model model){
         model.addAttribute("loginRequest", new UserModel());
-        return "login_page";
+        return "login";
     }
 
     @PostMapping("/register")
-    public String register(@ModelAttribute UserModel userModel){
-        System.out.println("register request: " + userModel);
+    public String register(@ModelAttribute UserModel userModel, Model model){
+//        System.out.println("register request: " + userModel);
         UserModel registeredUser =
                 userService.registerUser(
                         userModel.getFirstName(),
@@ -46,30 +46,36 @@ public class UserController {
                         userModel.getCity()
                 );
 
-        return registeredUser == null ? "error_page" : "redirect:/login";
+        if (registeredUser != null) {
+            return "login";
+        }
+        else {
+            model.addAttribute("displayRegisterError", true);
+            return "registration";
+        }
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UserModel userModel, Model model ){
-        System.out.println("login request: " + userModel);
+    public String login(@ModelAttribute UserModel userModel, Model model){
+//        System.out.println("login request: " + userModel);
         UserModel authenticated = userService.authenticate(userModel.getUsername(), userModel.getPassword());
         if (authenticated != null ){
-            model.addAttribute("userLogin", authenticated.getUsername());
+            // model.addAttribute("userLogin", authenticated.getUsername()); --> <span th:text="${userLogin}"></span>
 
             // Determine the user's role and redirect accordingly
             if (authenticated.getRoles().stream().anyMatch(role -> role.getName().equals("SELLER"))) {
                 return "seller";
             } else if (authenticated.getRoles().stream().anyMatch(role -> role.getName().equals("CUSTOMER"))) {
                 return "customer";
-            } else {
-                // Handle other roles or scenarios here
-                return "error_page";
             }
-            // TODO: check role & decide where to redirect!
-
-        } else {
-            return "error_page";
+//            else { --> case for users without roles!
+//                model.addAttribute("displayLoginError", true);
+//            }
         }
+        else {
+            model.addAttribute("displayLoginError", true);
+        }
+        return "login";
     }
 
     @GetMapping("/seller")

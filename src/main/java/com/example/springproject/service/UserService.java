@@ -26,7 +26,7 @@ public class UserService {
             return null;
         } else {
             if (userRepository.findFirstByUsername(username).isPresent()){
-                System.out.println("Duplicate login");
+//                System.out.println("Duplicate login");
                 return null;
             }
             UserModel userModel = new UserModel();

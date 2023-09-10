@@ -59,31 +59,31 @@
                         <!--                                </a>-->
                         <!--                            </li>-->
                         <li sec:authorize="hasRole('SELLER')">
-                            <a href="#" class="nav-link text-white">
+                            <a href="/addproduct" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#plus-square"/></svg>
                                 Add
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link text-white">
+                            <a href="/products" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#grid"/></svg>
                                 Products
                             </a>
                         </li>
                         <li sec:authorize="hasRole('CUSTOMER')">
-                            <a href="#" class="nav-link text-white" >
+                            <a href="/cart" class="nav-link text-white" >
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#cart"/></svg>
                                 Cart
                             </a>
                         </li>
                         <li>
-                            <a href="#" class="nav-link text-white">
+                            <a href="/orders" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#table"/></svg>
                                 Orders
                             </a>
                         </li>
                         <li>
-                            <a href="profile" class="nav-link text-white">
+                            <a href="/profile" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
                                 Profile
                             </a>

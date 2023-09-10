@@ -9,6 +9,7 @@ public class ProductModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String image;
     private float price;
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -17,16 +18,9 @@ public class ProductModel {
     public ProductModel() {
     }
 
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    public ProductModel(String name, float price, CategoryModel category) {
+    public ProductModel(String name, String image, float price, CategoryModel category) {
         this.name = name;
+        this.image = image;
         this.price = price;
         this.category = category;
     }
@@ -47,6 +41,22 @@ public class ProductModel {
         this.name = name;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public float getPrice() {
+        return price;
+    }
+
+    public void setPrice(float price) {
+        this.price = price;
+    }
+
     public CategoryModel getCategory() {
         return category;
     }
@@ -60,6 +70,8 @@ public class ProductModel {
         return "ProductModel{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", image='" + image + '\'' +
+                ", price=" + price +
                 ", category=" + category +
                 '}';
     }

@@ -53,6 +53,7 @@ public class InitialDataLoader implements CommandLineRunner {
         // Add products
         ProductModel jacket1 = new ProductModel(
                 "Winter Jacket",
+                "https://m.media-amazon.com/images/I/81rntI+0XHL._AC_UX679_.jpg",
                 120,
                 jacketCat
         );
@@ -60,6 +61,7 @@ public class InitialDataLoader implements CommandLineRunner {
 
         ProductModel jacket2 = new ProductModel(
                 "Jeans Jacket",
+                "https://5.imimg.com/data5/SELLER/Default/2021/7/GN/SV/SO/21288657/denim-jacket-1000x1000.jpeg",
                 50,
                 jacketCat
         );
@@ -68,6 +70,7 @@ public class InitialDataLoader implements CommandLineRunner {
         CategoryModel shirtCat = categoryRepository.findByName(CategoryEnum.SHIRTS);
         ProductModel shirt = new ProductModel(
                 "White shirt",
+                "https://www.schoolwear.ie/wp-content/uploads/2016/04/White-Shirt.jpg",
                 30,
                 shirtCat
         );
@@ -76,6 +79,7 @@ public class InitialDataLoader implements CommandLineRunner {
         CategoryModel tshirtCat = categoryRepository.findByName(CategoryEnum.TSHIRTS);
         ProductModel tshirt = new ProductModel(
                 "Black T-shirt",
+                "https://sonnenswim.com/cdn/shop/products/tshirtnegra1_1024x1024@2x.jpg?v=1656020034",
                 20,
                 tshirtCat
         );

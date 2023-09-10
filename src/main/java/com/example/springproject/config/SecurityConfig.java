@@ -44,6 +44,9 @@ public class SecurityConfig {
                         .requestMatchers("/register").permitAll() // Allow access without authentication
                         .requestMatchers("/login").permitAll() // Allow access without authentication
                         .requestMatchers("/profile**").permitAll() // Allow access without authentication
+                        .requestMatchers("/cart").permitAll()
+                        .requestMatchers("/addToCart").permitAll()
+                        .requestMatchers("/products**").permitAll()
                         .requestMatchers("/products").hasAnyAuthority("SELLER"/*, "CUSTOMER"*/)
                         .anyRequest().authenticated()
                 )

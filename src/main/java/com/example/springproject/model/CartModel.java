@@ -50,7 +50,7 @@ public class CartModel {
         OrderModel order = new OrderModel();
         order.setUsername(username);
         order.setTotalPrice(getTotalPrice());
-        order.setActive(false); // Initially, set it to inactive
+        order.setStatus(OrderStatusEnum.UNCONFIRMED); // Initially, set it to unconfirmed
         order.setOrderDate(LocalDateTime.now());
         return order;
     }

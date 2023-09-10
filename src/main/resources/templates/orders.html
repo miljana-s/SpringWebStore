@@ -24,12 +24,12 @@
     <tr th:each="order : ${orders}">
         <td th:text="${order.username}"></td>
         <td th:text="${order.id}"></td>
-        <td th:text="${order.active ? 'Active' : 'Inactive'}"></td>
+        <td th:text="${order.status}"></td>
         <td th:text="${order.orderDate}"></td>
         <td th:text="${order.totalPrice}"></td>
         <td>
             <!-- Display the "Confirm" button only if the order is not confirmed (active) -->
-            <form th:if="${not order.active}" th:action="@{'/confirmOrder/' + ${order.id}}" method="post">
+            <form th:if="${!order.isConfirmed}" th:action="@{'/confirmOrder/' + ${order.id}}" method="post">
                 <button type="submit">Confirm</button>
             </form>
             <form th:action="@{'/declineOrder/' + ${order.id}}" method="post">

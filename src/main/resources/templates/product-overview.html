@@ -10,12 +10,12 @@
 <body>
 <h2>Product Details</h2>
 <div>
-    <img th:src="${product.image}" alt="Product Image" style="max-height: 255px; align-self: center; padding: 10px;" />
-    <p>Name: <span th:text="${product.name}"></span></p>
-    <p>Price: $<span th:text="${product.price}"></span></p>
-    <p>Category: <span th:text="${product.category.name}"></span></p>
+    <img th:src="${selectedProduct.image}" alt="Product Image" style="max-height: 255px; align-self: center; padding: 10px;" />
+    <p>Name: <span th:text="${selectedProduct.name}"></span></p>
+    <p>Price: $<span th:text="${selectedProduct.price}"></span></p>
+    <p>Category: <span th:text="${selectedProduct.category.name}"></span></p>
     <form th:action="@{/addToCart}" method="post">
-        <input type="hidden" name="productId" th:value="${product.id}" />
+        <input type="hidden" name="productId" th:value="${selectedProduct.id}" />
         <button type="submit" class="btn btn-primary">Add to Cart</button>
     </form>
 

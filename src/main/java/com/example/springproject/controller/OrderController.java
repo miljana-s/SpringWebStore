@@ -1,6 +1,7 @@
 package com.example.springproject.controller;
 
 import com.example.springproject.model.OrderModel;
+import com.example.springproject.model.OrderStatusEnum;
 import com.example.springproject.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,7 @@ public class OrderController {
     public String confirmOrder(@PathVariable("orderId") Long orderId) {
         OrderModel order = orderRepository.findById(orderId).orElse(null);
         if (order != null) {
-            order.setActive(true); // Set order status to active
+            order.setStatus(OrderStatusEnum.CONFIRMED); // Set order status to active
             orderRepository.save(order);
         }
         return "redirect:/orders";

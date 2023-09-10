@@ -13,17 +13,17 @@ public class OrderModel {
 
     private String username;
     private double totalPrice;
-    @Column(name = "is_active")
-    private boolean active; // Represents the order status
+    @Enumerated(EnumType.STRING)
+    private OrderStatusEnum status; // Represents the order status
     private LocalDateTime orderDate; // Date when the order was created
 
     public OrderModel() {
     }
 
-    public OrderModel(String username, double totalPrice, boolean active, LocalDateTime orderDate) {
+    public OrderModel(String username, double totalPrice, OrderStatusEnum status, LocalDateTime orderDate) {
         this.username = username;
         this.totalPrice = totalPrice;
-        this.active = active;
+        this.status = status;
         this.orderDate = orderDate;
     }
 
@@ -51,12 +51,12 @@ public class OrderModel {
         this.totalPrice = totalPrice;
     }
 
-    public boolean isActive() {
-        return active;
+    public OrderStatusEnum getStatus() {
+        return status;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setStatus(OrderStatusEnum status) {
+        this.status = status;
     }
 
     public LocalDateTime getOrderDate() {
@@ -67,13 +67,17 @@ public class OrderModel {
         this.orderDate = orderDate;
     }
 
+    public boolean isConfirmed(){
+        return this.status == OrderStatusEnum.CONFIRMED;
+    }
+
     @Override
     public String toString() {
         return "OrderModel{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", totalPrice=" + totalPrice +
-                ", active=" + active +
+                ", status=" + status +
                 ", orderDate=" + orderDate +
                 '}';
     }

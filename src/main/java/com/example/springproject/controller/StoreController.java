@@ -30,7 +30,7 @@ public class StoreController {
     public String viewProductDetails(@PathVariable("id") Long id, Model model) {
         ProductModel product = storeService.getProductById(id);
         if (product != null) {
-            model.addAttribute("product", product);
+            model.addAttribute("selectedProduct", product);
             return "product-overview"; // This corresponds to the product.html template
         } else {
             // Handle product not found (e.g., show an error message)

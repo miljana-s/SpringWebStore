@@ -1,5 +1,6 @@
 package com.example.springproject.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +44,15 @@ public class CartModel {
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public OrderModel convertToOrder(String username) {
+        OrderModel order = new OrderModel();
+        order.setUsername(username);
+        order.setTotalPrice(getTotalPrice());
+        order.setActive(false); // Initially, set it to inactive
+        order.setOrderDate(LocalDateTime.now());
+        return order;
     }
 }
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <div th:replace="header :: header-css"></div>
+    <title>Products page</title>
+</head>
+<div th:replace="header :: default-header"></div>
+<body>
+<h1>Orders</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Username</th>
+        <th>ID</th>
+        <th>Status</th>
+        <th>Date</th>
+        <th>Total Price</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.username}"></td>
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.active ? 'Active' : 'Inactive'}"></td>
+        <td th:text="${order.orderDate}"></td>
+        <td th:text="${order.totalPrice}"></td>
+        <td>
+            <!-- Display the "Confirm" button only if the order is not confirmed (active) -->
+            <form th:if="${not order.active}" th:action="@{'/confirmOrder/' + ${order.id}}" method="post">
+                <button type="submit">Confirm</button>
+            </form>
+            <form th:action="@{'/declineOrder/' + ${order.id}}" method="post">
+                <button type="submit">Decline</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
+
+
+

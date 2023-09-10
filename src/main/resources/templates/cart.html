@@ -28,5 +28,11 @@
 </table>
 <p>Total Price: $<span th:text="${cart.totalPrice}"></span></p>
 
+<form th:action="@{/confirmCart}" method="post">
+    <button type="submit">Confirm Order</button>
+</form>
+<form th:action="@{/declineCart}" method="post">
+    <button type="submit">Decline Order</button>
+</form>
 </body>
 </html>

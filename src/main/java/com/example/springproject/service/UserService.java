@@ -4,7 +4,6 @@ import com.example.springproject.model.RoleModel;
 import com.example.springproject.model.UserModel;
 import com.example.springproject.repository.RoleRepository;
 import com.example.springproject.repository.UserRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -46,6 +45,7 @@ public class UserService {
 
             RoleModel customerRole = roleRepository.findByName("CUSTOMER");
             userModel.getRoles().add(customerRole);
+
 
             return userRepository.save(userModel);
         }
@@ -98,4 +98,10 @@ public class UserService {
         userRepository.save(existingUser);
         return anyFieldChanged? existingUser : null;
     }
+
+
+    public UserModel findByUsername(String username) {
+        return userRepository.findByUsername(username);
+    }
+
 }

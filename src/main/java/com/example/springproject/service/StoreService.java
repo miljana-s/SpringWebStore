@@ -20,4 +20,9 @@ public class StoreService {
     public List<ProductModel> getAllProducts(){
         return productRepository.findAll();
     }
+
+    public ProductModel getProductById(Long id) {
+        return productRepository.findById(id).orElse(null);
+    }
+
 }

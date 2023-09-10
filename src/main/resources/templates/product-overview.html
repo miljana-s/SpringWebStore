@@ -8,18 +8,55 @@
 </head>
 <div th:replace="header :: default-header"></div>
 <body>
-<h2>Product Details</h2>
-<div>
-    <img th:src="${selectedProduct.image}" alt="Product Image" style="max-height: 255px; align-self: center; padding: 10px;" />
-    <p>Name: <span th:text="${selectedProduct.name}"></span></p>
-    <p>Price: $<span th:text="${selectedProduct.price}"></span></p>
-    <p>Category: <span th:text="${selectedProduct.category.name}"></span></p>
-    <form th:action="@{/addToCart}" method="post">
-        <input type="hidden" name="productId" th:value="${selectedProduct.id}" />
-        <button type="submit" class="btn btn-primary">Add to Cart</button>
-    </form>
 
-
+<div class = "container">
+    <section>
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6 col-xl-4">
+                    <div class="card text-black">
+                        <i class="fab fa-apple fa-lg pt-3 pb-1 px-3"></i>
+                        <img th:src="${selectedProduct.image}"
+                             class="card-img-top"/>
+                        <div class="card-body">
+                            <div class="text-center">
+                                <h5 class="card-title"><span th:text="${selectedProduct.name}"></span></h5>
+                                <p class="text-muted mb-4"><span th:text="${selectedProduct.category.name}"></span></p>
+                            </div>
+                            <!--<div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Pro Display XDR</span><span>$5,999</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Pro stand</span><span>$999</span>
+                                </div>
+                                <div class="d-flex justify-content-between">
+                                    <span>Vesa Mount Adapter</span><span>$199</span>
+                                </div>
+                            </div>-->
+                            <div class="d-flex justify-content-between total font-weight-bold mt-4">
+                                <span>Price</span>
+                                <span style="color: green; font-weight: bold;">
+                                    <span th:text="${selectedProduct.price}"></span><span>&#8364;</span>
+                                </span>
+                            </div>
+                            <hr class="my-4">
+                            <div class="btn-group d-flex justify-content-center">
+                                <form th:action="@{/addToCart}" method="post">
+                                    <input type="hidden" name="productId" th:value="${selectedProduct.id}" />
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Add to Cart</button>
+                                    <!--<button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </div>
 </body>
 </html>
+
+
+

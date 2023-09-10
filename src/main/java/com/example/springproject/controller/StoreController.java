@@ -1,7 +1,10 @@
 package com.example.springproject.controller;
 
+import com.example.springproject.model.CartItemModel;
+import com.example.springproject.model.CartModel;
 import com.example.springproject.model.ProductModel;
 import com.example.springproject.service.StoreService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +23,16 @@ public class StoreController {
     }
 
     @GetMapping("/products")
-    public String getProductsPage(Model model){
+    public String getProductsPage(Model model, HttpSession session){
         model.addAttribute("product_list", this.storeService.getAllProducts());
+        CartModel cart = (CartModel) session.getAttribute("cart");
+        int itemsInCart = 0;
+        if (cart != null) {
+            for ( CartItemModel item : cart.getItems()){
+                itemsInCart += item.getQuantity();
+            }
+        }
+        model.addAttribute("itemsInCart", itemsInCart );
         return "products";
     }
 

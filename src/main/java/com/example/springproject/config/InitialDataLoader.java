@@ -1,12 +1,15 @@
 package com.example.springproject.config;
 
-import com.example.springproject.model.UserModel;
+import com.example.springproject.model.*;
+import com.example.springproject.repository.CategoryRepository;
+import com.example.springproject.repository.ProductRepository;
 import com.example.springproject.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import com.example.springproject.model.RoleModel;
 import com.example.springproject.repository.RoleRepository;
+
+import java.util.stream.Stream;
 
 @Component
 public class InitialDataLoader implements CommandLineRunner {
@@ -14,14 +17,72 @@ public class InitialDataLoader implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
-    public InitialDataLoader(RoleRepository roleRepository, UserRepository userRepository) {
+    public InitialDataLoader(
+            RoleRepository roleRepository,
+            UserRepository userRepository,
+            ProductRepository productRepository,
+            CategoryRepository categoryRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     @Override
     public void run(String... args) throws Exception {
+        loadUser();
+        loadProducts();
+    }
+
+    private void loadProducts() {
+        // Add categories first
+//        for (category : CategoryEnum.values()) {
+//            CategoryModel categoryModel = new CategoryModel(category);
+//            categoryRepository.save(categoryModel);
+//        }
+        Stream.of(CategoryEnum.values()).forEach(
+                categoryEnum -> {
+                    CategoryModel categoryModel = new CategoryModel(categoryEnum);
+                    categoryRepository.save(categoryModel);
+                }
+        );
+        CategoryModel jacketCat = categoryRepository.findByName(CategoryEnum.JACKETS);
+        // Add products
+        ProductModel jacket1 = new ProductModel(
+                "Winter Jacket",
+                120,
+                jacketCat
+        );
+        productRepository.save(jacket1);
+
+        ProductModel jacket2 = new ProductModel(
+                "Jeans Jacket",
+                50,
+                jacketCat
+        );
+        productRepository.save(jacket2);
+
+        CategoryModel shirtCat = categoryRepository.findByName(CategoryEnum.SHIRTS);
+        ProductModel shirt = new ProductModel(
+                "White shirt",
+                30,
+                shirtCat
+        );
+        productRepository.save(shirt);
+
+        CategoryModel tshirtCat = categoryRepository.findByName(CategoryEnum.TSHIRTS);
+        ProductModel tshirt = new ProductModel(
+                "Black T-shirt",
+                20,
+                tshirtCat
+        );
+        productRepository.save(tshirt);
+    }
+
+    private void loadUser() {
         RoleModel customerRole = new RoleModel();
         customerRole.setName("CUSTOMER");
         roleRepository.save(customerRole);

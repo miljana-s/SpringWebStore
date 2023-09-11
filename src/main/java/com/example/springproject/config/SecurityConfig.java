@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers("/declineOrder/{orderId}").permitAll()
                         .requestMatchers("/confirmCart").permitAll()
                         .requestMatchers("/declineCart").permitAll()
+                        .requestMatchers("/add-product").permitAll()
                         .requestMatchers("/products").hasAnyAuthority("SELLER"/*, "CUSTOMER"*/)
                         .anyRequest().authenticated()
                 )

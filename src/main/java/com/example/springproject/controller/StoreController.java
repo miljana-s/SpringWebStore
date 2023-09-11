@@ -67,7 +67,7 @@ public class StoreController {
 
 
     @PostMapping("/add-product")
-    public String addProduct(@ModelAttribute ProductModel newProduct) {
+    public String addProduct(@ModelAttribute ProductModel newProduct, Model model) {
         // Fetch the selected category using its ID from the form
         CategoryModel selectedCategory = categoryRepository.findById(newProduct.getCategory().getId()).orElse(null);
         if (selectedCategory != null) {
@@ -75,12 +75,17 @@ public class StoreController {
             newProduct.setCategory(selectedCategory);
             // Save the new product to the database
             storeService.addProduct(newProduct);
-            return "redirect:/products";
+
+            model.addAttribute("showSuccessMessage", true);
+
+            return "add-product";
+
         } else {
 
             return "error";
         }
     }
+
 
 
 }

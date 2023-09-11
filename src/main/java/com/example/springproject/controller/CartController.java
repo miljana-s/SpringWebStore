@@ -1,5 +1,6 @@
 package com.example.springproject.controller;
 
+import com.example.springproject.model.CartItemModel;
 import com.example.springproject.model.CartModel;
 import com.example.springproject.model.OrderModel;
 import com.example.springproject.model.ProductModel;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+import java.util.stream.Collectors;
 
 @Controller
 public class CartController {
@@ -58,16 +60,37 @@ public class CartController {
 
     @PostMapping("/confirmCart")
     public String confirmCart(HttpSession session, Principal principal) {
+        System.out.println("Confirm Cart method called!");
+        // Retrieve the cart from the session
         CartModel cart = (CartModel) session.getAttribute("cart");
-        if (cart != null && !cart.getItems().isEmpty()) {
-            // Convert cart to an order and save it
-            OrderModel order = cart.convertToOrder(principal.getName());
-            orderRepository.save(order);
 
-            // Clear the cart
-            cart.clear();
+        // Check if the cart and principal are not null
+        if (cart != null && principal != null && !cart.getItems().isEmpty()) {
+            try {
+                // Convert cart to an order and save it
+                OrderModel order = cart.convertToOrder(principal.getName());
+
+                // Associate all products in the cart with the order
+                order.setProducts(cart.getItems().stream()
+                        .map(CartItemModel::getProduct)
+                        .collect(Collectors.toSet()));
+
+                orderRepository.save(order);
+
+                // Clear the cart
+                cart.clear();
+
+                // Redirect to the orders page after successful confirmation
+                return "redirect:/orders"; // You should have a mapping for "/orders" in your controller
+            } catch (Exception e) {
+                // Handle any exceptions (e.g., database errors) gracefully
+                e.printStackTrace(); // Log the exception for debugging
+                // You might want to add an error message to the model or redirect to an error page
+            }
         }
-        return "redirect:/orders"; // Redirect to the orders page or another appropriate page
+
+        // If the cart is empty or the confirmation failed, you can redirect to another page or show an error message.
+        return "redirect:/cart";
     }
 
     @PostMapping("/declineCart")
@@ -79,5 +102,6 @@ public class CartController {
         }
         return "redirect:/products"; // Redirect to the products page or another appropriate page
     }
+
 
 }

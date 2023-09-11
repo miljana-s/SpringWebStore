@@ -2,7 +2,9 @@ package com.example.springproject.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -13,9 +15,14 @@ public class ProductModel {
     private String name;
     private String image;
     private float price;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryModel category;
+
+    @ManyToMany(mappedBy = "products")
+    private Set<OrderModel> orders = new HashSet<>();
+
 
     public ProductModel() {
     }
@@ -67,6 +74,27 @@ public class ProductModel {
         this.category = category;
     }
 
+    public Set<OrderModel> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<OrderModel> orders) {
+        this.orders = orders;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductModel that = (ProductModel) o;
+        return Float.compare(that.price, price) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(image, that.image) && Objects.equals(category, that.category) && Objects.equals(orders, that.orders);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, image, price, category, orders);
+    }
+
     @Override
     public String toString() {
         return "ProductModel{" +
@@ -75,19 +103,7 @@ public class ProductModel {
                 ", image='" + image + '\'' +
                 ", price=" + price +
                 ", category=" + category +
+                ", orders=" + orders +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductModel that = (ProductModel) o;
-        return Float.compare(that.price, price) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(image, that.image) && Objects.equals(category, that.category);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, image, price, category);
     }
 }

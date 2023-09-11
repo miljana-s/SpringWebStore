@@ -30,6 +30,11 @@ public class StoreController {
         this.categoryRepository = categoryRepository;
     }
 
+    @GetMapping("/")
+    public String getHomePage(){
+        return "index";
+    }
+
     @GetMapping("/products")
     public String getProductsPage(Model model, HttpSession session){
         model.addAttribute("product_list", this.storeService.getAllProducts());

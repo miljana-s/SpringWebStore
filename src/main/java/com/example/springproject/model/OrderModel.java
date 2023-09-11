@@ -3,6 +3,8 @@ package com.example.springproject.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -14,8 +16,8 @@ public class OrderModel {
     private String username;
     private double totalPrice;
     @Enumerated(EnumType.STRING)
-    private OrderStatusEnum status; // Represents the order status
-    private LocalDateTime orderDate; // Date when the order was created
+    private OrderStatusEnum status;
+    private LocalDateTime orderDate;
 
     public OrderModel() {
     }

@@ -8,39 +8,42 @@
 </head>
 <div th:replace="header :: default-header"></div>
 <body>
+<div class="container">
 <h1>Orders</h1>
-<table>
+
+<table class="table table-striped">
     <thead>
-    <tr>
-        <th>Username</th>
-        <th>OrderID</th>
-        <th>Status</th>
-        <th>Date</th>
-        <th>Total Price</th>
-        <th>Action</th>
+    <tr class="line">
+        <td><strong>OrderID</strong></td>
+        <td class="text-right"><strong>Username</strong></td>
+        <td class="text-right"><strong>Status</strong></td>
+        <td class="text-right"><strong>Date</strong></td>
+        <td class="text-right"><strong>Total Price</strong></td>
+        <td class="text-right"><strong>Action</strong></td>
     </tr>
     </thead>
     <tbody>
     <tr th:each="order : ${orders}">
-        <td th:text="${order.username}"></td>
         <td th:text="${order.id}"></td>
+        <td th:text="${order.username}"><br>
         <td th:text="${order.status}"></td>
         <td th:text="${order.orderDate}"></td>
         <td th:text="${order.totalPrice}"></td>
         <td>
             <!-- Display the "Confirm" button only if the order is not confirmed (active) -->
             <form th:if="${!order.isConfirmed}" th:action="@{'/confirmOrder/' + ${order.id}}" method="post">
-                <button type="submit">Confirm</button>
+                <button class="w-50 btn btn-primary btn-lg" type="submit">Confirm</button>
             </form>
+            <br>
             <form th:action="@{'/declineOrder/' + ${order.id}}" method="post">
-                <button type="submit">Decline</button>
+                <button class="w-50 btn btn-primary btn-lg" type="submit">Decline</button>
             </form>
         </td>
     </tr>
     </tbody>
 </table>
+</div>
 </body>
 </html>
-
 
 

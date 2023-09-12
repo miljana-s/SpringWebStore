@@ -54,5 +54,19 @@ public class CartModel {
         order.setOrderDate(LocalDateTime.now());
         return order;
     }
+
+    public int getNumOfAllItems() {
+        int itemsInCart = 0;
+        if (getItems() != null){
+            for (CartItemModel item : getItems()){
+                    itemsInCart += item.getQuantity();
+            }
+        }
+        return itemsInCart;
+    }
+
+    public int getNumOfItems() {
+        return getItems().size();
+    }
 }
 

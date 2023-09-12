@@ -1,9 +1,11 @@
 package com.example.springproject.controller;
 
+import com.example.springproject.model.CartModel;
 import com.example.springproject.model.UserModel;
 import com.example.springproject.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -79,7 +81,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    public String getProfilePage(Model model){
+    public String getProfilePage(Model model, HttpSession session){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserModel existingUser = (UserModel)authentication.getPrincipal();
         UserModel clonedUser = new UserModel(
@@ -95,6 +97,11 @@ public class UserController {
                 null
         );
         model.addAttribute("userData", clonedUser);
+        CartModel cart = (CartModel) session.getAttribute("cart");
+        if (cart == null) {
+                cart = new CartModel();
+        }
+        model.addAttribute("cart", cart);
         return "profile";
     }
 

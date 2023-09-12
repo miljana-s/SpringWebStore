@@ -5,34 +5,168 @@
 <head>
     <div th:replace="header :: header-css"></div>
     <title>Products page</title>
+    <style>
+        @media (min-width: 1025px) {
+                .h-custom {
+                    height: 100vh !important;
+                }
+            }
+
+        .card-registration .select-input.form-control[readonly]:not([disabled]) {
+            font-size: 1rem;
+            line-height: 2.15;
+            padding-left: .75em;
+            padding-right: .75em;
+        }
+
+        .card-registration .select-arrow {
+            top: 13px;
+        }
+
+        .bg-grey {
+            background-color: #eae8e8;
+        }
+
+        @media (min-width: 992px) {
+                .card-registration-2 .bg-grey {
+                    border-top-right-radius: 16px;
+                    border-bottom-right-radius: 16px;
+                }
+            }
+
+        @media (max-width: 991px) {
+                .card-registration-2 .bg-grey {
+                    border-bottom-left-radius: 16px;
+                    border-bottom-right-radius: 16px;
+                }
+            }
+    </style>
 </head>
 <div th:replace="header :: default-header"></div>
 <body>
-<!-- cart.html -->
-<h2>Your Shopping Cart</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Product</th>
-        <th>Quantity</th>
-        <th>Price</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="item : ${cart.items}">
-        <td th:text="${item.product.name}"></td>
-        <td th:text="${item.quantity}"></td>
-        <td th:text="${item.subtotal}"></td>
-    </tr>
-    </tbody>
-</table>
-<p>Total Price: $<span th:text="${cart.totalPrice}"></span></p>
+<!-- CART -->
+<div class="container">
+    <section class="h-100 h-custom" style="background-color: #d2c9ff;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12">
+                    <div class="card card-registration card-registration-2" style="border-radius: 15px;">
+                        <div class="card-body p-0">
+                            <div class="row g-0">
+                                <div class="col-lg-8">
+                                    <div class="p-5">
+                                        <div class="d-flex justify-content-between align-items-center mb-5">
+                                            <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
+                                            <h6 class="mb-0 text-muted" th:text="${cart.getNumOfItems} + ' items'"></h6>
+                                        </div>
 
-<form th:action="@{/confirmCart}" method="post">
-    <button type="submit">Confirm Order</button>
-</form>
-<form th:action="@{/declineCart}" method="post">
-    <button type="submit">Decline Order</button>
-</form>
+                                        <hr class="my-4">
+
+                                        <div th:each="cartItem : ${cart.items}">
+                                            <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                                <!-- Image -->
+                                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                                    <img th:src="${cartItem.product.image}" class="img-fluid rounded-3">
+                                                </div>
+                                                <!-- Category and name -->
+                                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                                    <h6 class="text-muted" th:text="${cartItem.product.category.name}"></h6>
+                                                    <h6 class="text-black mb-0" th:text="${cartItem.product.name}"></h6>
+                                                </div>
+                                                <!-- Quantity -->
+                                                <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                                    <button class="btn btn-link px-2"
+                                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+
+                                                    <input id="form1" min="0" name="quantity" th:value="${cartItem.getQuantity}" type="number"
+                                                           class="form-control form-control-sm" />
+
+                                                    <button class="btn btn-link px-2"
+                                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
+                                                        <i class="fas fa-plus"></i>
+                                                    </button>
+                                                </div>
+                                                <!-- Price -->
+                                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                                    <h6 class="mb-0" th:text="${cartItem.getSubtotal}"></h6>
+                                                </div>
+                                                <!-- Delete item -->
+                                                <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                                    <a href="" class="text-muted"><i class="fas fa-times">X</i></a>
+                                                </div>
+                                            </div>
+                                            <hr class="my-4">
+                                        </div>
+
+                                        <div class="pt-5">
+                                            <h6 class="mb-0">
+                                                <a href="/products" class="text-body">
+                                                    <i class="fas fa-long-arrow-alt-left me-2"></i>
+                                                    Back to shop
+                                                </a>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- RIGHT SIDE BAR -->
+                                <div class="col-lg-4 bg-grey">
+                                    <div class="p-5">
+                                        <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
+                                        <hr class="my-4">
+
+                                        <div class="d-flex justify-content-between mb-4">
+                                            <h5 class="text-uppercase">TOTAL ITEMS</h5>
+                                            <h5 th:text="${cart.getNumOfAllItems}"></h5>
+
+                                        </div>
+
+<!--                                        <h5 class="text-uppercase mb-3">Shipping</h5>-->
+
+<!--                                        <div class="mb-4 pb-2">-->
+<!--                                            <select class="select">-->
+<!--                                                <option value="1">Standard-Delivery- €5.00</option>-->
+<!--                                                <option value="2">Two</option>-->
+<!--                                                <option value="3">Three</option>-->
+<!--                                                <option value="4">Four</option>-->
+<!--                                            </select>-->
+<!--                                        </div>-->
+
+                                        <hr class="my-4">
+
+                                        <div class="d-flex justify-content-between mb-5">
+                                            <h5 class="text-uppercase">Total price</h5>
+                                            <h5 class="text-uppercase" style="color: green; font-weight: bold;">
+                                                <span>&#8364;</span>
+                                                <span th:text="${cart.getTotalPrice}"></span>
+                                            </h5>
+                                        </div>
+
+                                        <div class="d-flex justify-content-between mb-5">
+                                            <form method="post"th:action="@{/confirmCart}">
+                                                <button type="submit" class="btn btn-dark btn-block btn-lg">SEND ORDER</button>
+                                            </form>
+                                            <form method="post" th:action="@{/declineCart}">
+                                                <button type="submit" class="btn btn-dark btn-block btn-lg">CLEAN CART</button>
+                                            </form>
+                                            <!--                                            <form th:action="@{/confirmCart}" method="post">-->
+                                            <!--                                                <button type="submit">Confirm Order</button>-->
+                                            <!--                                            </form>-->
+                                            <!--                                            <form th:action="@{/declineCart}" method="post">-->
+                                            <!--                                                <button type="submit">Decline Order</button>-->
+                                            <!--                                            </form>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </div>
 </body>
 </html>

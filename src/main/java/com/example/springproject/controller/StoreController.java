@@ -1,6 +1,5 @@
 package com.example.springproject.controller;
 
-import com.example.springproject.model.CartItemModel;
 import com.example.springproject.model.CartModel;
 import com.example.springproject.model.CategoryModel;
 import com.example.springproject.model.ProductModel;
@@ -39,26 +38,30 @@ public class StoreController {
     public String getProductsPage(Model model, HttpSession session){
         model.addAttribute("product_list", this.storeService.getAllProducts());
         CartModel cart = (CartModel) session.getAttribute("cart");
-        int itemsInCart = 0;
-        if (cart != null) {
-            for ( CartItemModel item : cart.getItems()){
-                itemsInCart += item.getQuantity();
-            }
+        if (cart == null) {
+            cart = new CartModel();
+            session.setAttribute("cart", cart);
         }
-        model.addAttribute("itemsInCart", itemsInCart );
+        model.addAttribute("cart", cart );
         return "products";
     }
 
 
     @GetMapping("/products/{id}")
-    public String viewProductDetails(@PathVariable("id") Long id, Model model) {
+    public String viewProductDetails(@PathVariable("id") Long id, Model model, HttpSession session) {
         ProductModel product = storeService.getProductById(id);
         if (product != null) {
+            CartModel cart = (CartModel) session.getAttribute("cart");
+            if (cart == null) {
+                    cart = new CartModel();
+                    session.setAttribute("cart", cart);
+                }
+            model.addAttribute("cart", cart);
             model.addAttribute("selectedProduct", product);
-            return "product-overview"; // This corresponds to the product.html template
+            return "product-overview";
         } else {
-            // Handle product not found (e.g., show an error message)
-            return "error"; // Create an error.html template for error handling
+
+            return "error";
         }
     }
 

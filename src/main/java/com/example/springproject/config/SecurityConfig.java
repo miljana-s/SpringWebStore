@@ -39,7 +39,7 @@ public class SecurityConfig {
         http/*.csrf(AbstractHttpConfigurer::disable)*/
                 .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                        .requestMatchers("/**").permitAll() // Allow access without authentication
+                        .requestMatchers("/").permitAll() // Allow access without authentication
                         .requestMatchers("/index").permitAll() // Allow access without authentication
                         .requestMatchers("/register").permitAll() // Allow access without authentication
                         .requestMatchers("/login").permitAll() // Allow access without authentication

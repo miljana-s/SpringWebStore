@@ -2,7 +2,9 @@ package com.example.springproject.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "product")
@@ -17,14 +19,18 @@ public class ProductModel {
     @JoinColumn(name = "category_id")
     private CategoryModel category;
 
+    @OneToMany(mappedBy = "product")
+    Set<OrderItemModel> orderItems = new HashSet<>();
+
     public ProductModel() {
     }
 
-    public ProductModel(String name, String image, float price, CategoryModel category) {
+    public ProductModel(String name, String image, float price, CategoryModel category, Set<OrderItemModel> orderItems) {
         this.name = name;
         this.image = image;
         this.price = price;
         this.category = category;
+        this.orderItems = orderItems;
     }
 
     public Long getId() {
@@ -67,6 +73,27 @@ public class ProductModel {
         this.category = category;
     }
 
+    public Set<OrderItemModel> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItemModel> orderItems) {
+        this.orderItems = orderItems;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductModel that = (ProductModel) o;
+        return Float.compare(that.price, price) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(image, that.image) && Objects.equals(category, that.category) && Objects.equals(orderItems, that.orderItems);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, image, price, category, orderItems);
+    }
+
     @Override
     public String toString() {
         return "ProductModel{" +
@@ -75,19 +102,7 @@ public class ProductModel {
                 ", image='" + image + '\'' +
                 ", price=" + price +
                 ", category=" + category +
+                ", orderItems=" + orderItems +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductModel that = (ProductModel) o;
-        return Float.compare(that.price, price) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(image, that.image) && Objects.equals(category, that.category);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, image, price, category);
     }
 }

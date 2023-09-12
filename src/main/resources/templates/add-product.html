@@ -33,7 +33,6 @@
                     <label for="category" class="form-label">Category:</label>
                     <select id="category" name="category.id" class="form-control" required>
                         <option value="">Select a category</option>
-                        <!-- Populate dropdown options with categories from the database -->
                         <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
                     </select><br>
                 </div>

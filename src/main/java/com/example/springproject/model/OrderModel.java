@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -19,14 +21,18 @@ public class OrderModel {
     private OrderStatusEnum status;
     private LocalDateTime orderDate;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
+    Set<OrderItemModel> orderItems = new HashSet<>();
+
     public OrderModel() {
     }
 
-    public OrderModel(String username, double totalPrice, OrderStatusEnum status, LocalDateTime orderDate) {
+    public OrderModel(String username, double totalPrice, OrderStatusEnum status, LocalDateTime orderDate, Set<OrderItemModel> orderItems) {
         this.username = username;
         this.totalPrice = totalPrice;
         this.status = status;
         this.orderDate = orderDate;
+        this.orderItems = orderItems;
     }
 
     public Long getId() {
@@ -73,6 +79,14 @@ public class OrderModel {
         return this.status == OrderStatusEnum.CONFIRMED;
     }
 
+    public Set<OrderItemModel> getOrderItems() {
+        return orderItems;
+    }
+
+    public void setOrderItems(Set<OrderItemModel> orderItems) {
+        this.orderItems = orderItems;
+    }
+
     @Override
     public String toString() {
         return "OrderModel{" +
@@ -81,7 +95,13 @@ public class OrderModel {
                 ", totalPrice=" + totalPrice +
                 ", status=" + status +
                 ", orderDate=" + orderDate +
+                ", orderItems=" + orderItems +
                 '}';
+    }
+
+    public void addOrderItem(OrderItemModel orderItem) {
+        this.orderItems.add(orderItem);
+        orderItem.setOrder(this);
     }
 }
 

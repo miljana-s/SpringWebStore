@@ -55,7 +55,8 @@ public class InitialDataLoader implements CommandLineRunner {
                 "Winter Jacket",
                 "https://m.media-amazon.com/images/I/81rntI+0XHL._AC_UX679_.jpg",
                 120,
-                jacketCat
+                jacketCat,
+                null
         );
         productRepository.save(jacket1);
 
@@ -63,7 +64,8 @@ public class InitialDataLoader implements CommandLineRunner {
                 "Jeans Jacket",
                 "https://5.imimg.com/data5/SELLER/Default/2021/7/GN/SV/SO/21288657/denim-jacket-1000x1000.jpeg",
                 50,
-                jacketCat
+                jacketCat,
+                null
         );
         productRepository.save(jacket2);
 
@@ -72,7 +74,8 @@ public class InitialDataLoader implements CommandLineRunner {
                 "White shirt",
                 "https://www.schoolwear.ie/wp-content/uploads/2016/04/White-Shirt.jpg",
                 30,
-                shirtCat
+                shirtCat,
+                null
         );
         productRepository.save(shirt);
 
@@ -81,7 +84,8 @@ public class InitialDataLoader implements CommandLineRunner {
                 "Black T-shirt",
                 "https://sonnenswim.com/cdn/shop/products/tshirtnegra1_1024x1024@2x.jpg?v=1656020034",
                 20,
-                tshirtCat
+                tshirtCat,
+                null
         );
         productRepository.save(tshirt);
     }

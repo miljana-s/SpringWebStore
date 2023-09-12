@@ -21,13 +21,13 @@ public class OrderModel {
     private OrderStatusEnum status;
     private LocalDateTime orderDate;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
-    Set<OrderItemModel> orderItems = new HashSet<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItemModel> orderItems;
 
     public OrderModel() {
     }
 
-    public OrderModel(String username, double totalPrice, OrderStatusEnum status, LocalDateTime orderDate, Set<OrderItemModel> orderItems) {
+    public OrderModel(String username, double totalPrice, OrderStatusEnum status, LocalDateTime orderDate, List<OrderItemModel> orderItems) {
         this.username = username;
         this.totalPrice = totalPrice;
         this.status = status;
@@ -79,11 +79,11 @@ public class OrderModel {
         return this.status == OrderStatusEnum.CONFIRMED;
     }
 
-    public Set<OrderItemModel> getOrderItems() {
+    public List<OrderItemModel> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(Set<OrderItemModel> orderItems) {
+    public void setOrderItems(List<OrderItemModel> orderItems) {
         this.orderItems = orderItems;
     }
 
@@ -95,7 +95,6 @@ public class OrderModel {
                 ", totalPrice=" + totalPrice +
                 ", status=" + status +
                 ", orderDate=" + orderDate +
-                ", orderItems=" + orderItems +
                 '}';
     }
 

@@ -1,54 +1,48 @@
 package com.example.springproject.model;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class OrderItemKey implements Serializable {
+    private Long order;     // Reference to OrderModel id
+    private Long product;   // Reference to ProductModel id
 
-    @Column(name = "order_id")
-    Long orderId;
+    public OrderItemKey() {}
 
-    @Column(name = "product_id")
-    Long productId;
-
-    public OrderItemKey() {
+    public OrderItemKey(Long order, Long product) {
+        this.order = order;
+        this.product = product;
     }
 
-    public OrderItemKey(Long orderId, Long productId) {
-        this.orderId = orderId;
-        this.productId = productId;
+    public Long getOrder() {
+        return order;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public void setOrder(Long order) {
+        this.order = order;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public Long getProduct() {
+        return product;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
+    public void setProduct(Long product) {
+        this.product = product;
     }
 
     @Override
     public boolean equals(Object o) {
+        if(o == null) return false;
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderItemKey that = (OrderItemKey) o;
-        return Objects.equals(orderId, that.orderId) && Objects.equals(productId, that.productId);
+        return Objects.equals(order, that.order) && Objects.equals(product, that.product);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(orderId, productId);
+        return Objects.hash(order, product);
     }
 }

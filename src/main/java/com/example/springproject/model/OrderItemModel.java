@@ -7,17 +7,17 @@ import jakarta.persistence.*;
 public class OrderItemModel {
 
     @EmbeddedId
-    OrderItemKey id;
+    private OrderItemKey id;
 
-    @ManyToOne
-    @MapsId("orderId")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @MapsId("order")
     @JoinColumn(name = "order_id")
-    OrderModel order;
+    private OrderModel order;
 
-    @ManyToOne
-    @MapsId("productId")
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @MapsId("product")
     @JoinColumn(name = "product_id")
-    ProductModel product;
+    private ProductModel product;
 
     private int quantity = 1;
     private double price;
@@ -25,8 +25,7 @@ public class OrderItemModel {
     public OrderItemModel() {
     }
 
-    public OrderItemModel(OrderItemKey id, OrderModel order, ProductModel product, int quantity, double price) {
-        this.id = id;
+    public OrderItemModel(OrderModel order, ProductModel product, int quantity, double price) {
         this.order = order;
         this.product = product;
         this.quantity = quantity;

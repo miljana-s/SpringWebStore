@@ -13,7 +13,7 @@ public class CategoryModel {
     @Enumerated(EnumType.STRING)
     private CategoryEnum name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", fetch = FetchType.EAGER)
     private List<ProductModel> products;
 
     public CategoryModel() {

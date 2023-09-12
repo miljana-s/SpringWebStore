@@ -3,6 +3,7 @@ package com.example.springproject.model;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,12 +21,12 @@ public class ProductModel {
     private CategoryModel category;
 
     @OneToMany(mappedBy = "product")
-    Set<OrderItemModel> orderItems = new HashSet<>();
+    List<OrderItemModel> orderItems;
 
     public ProductModel() {
     }
 
-    public ProductModel(String name, String image, float price, CategoryModel category, Set<OrderItemModel> orderItems) {
+    public ProductModel(String name, String image, float price, CategoryModel category, List<OrderItemModel> orderItems) {
         this.name = name;
         this.image = image;
         this.price = price;
@@ -73,11 +74,11 @@ public class ProductModel {
         this.category = category;
     }
 
-    public Set<OrderItemModel> getOrderItems() {
+    public List<OrderItemModel> getOrderItems() {
         return orderItems;
     }
 
-    public void setOrderItems(Set<OrderItemModel> orderItems) {
+    public void setOrderItems(List<OrderItemModel> orderItems) {
         this.orderItems = orderItems;
     }
 
@@ -94,15 +95,4 @@ public class ProductModel {
         return Objects.hash(id, name, image, price, category, orderItems);
     }
 
-    @Override
-    public String toString() {
-        return "ProductModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", image='" + image + '\'' +
-                ", price=" + price +
-                ", category=" + category +
-                ", orderItems=" + orderItems +
-                '}';
-    }
 }

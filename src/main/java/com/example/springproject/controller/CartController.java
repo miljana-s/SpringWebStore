@@ -4,6 +4,7 @@ import com.example.springproject.model.CartModel;
 import com.example.springproject.model.OrderModel;
 import com.example.springproject.model.ProductModel;
 import com.example.springproject.repository.OrderRepository;
+import com.example.springproject.service.OrderService;
 import com.example.springproject.service.StoreService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +21,14 @@ public class CartController {
 
     private final StoreService storeService;
     private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
     @Autowired
-    public CartController(StoreService storeService, OrderRepository orderRepository) {
+    public CartController(StoreService storeService, OrderRepository orderRepository, OrderService orderService) {
         this.storeService = storeService;
         this.orderRepository = orderRepository;
+        this.orderService = orderService;
     }
-
     // Handle adding items to the cart
     @PostMapping("/addToCart")
     public String addToCart(@RequestParam("productId") Long productId, HttpSession session) {
@@ -60,14 +62,14 @@ public class CartController {
     public String confirmCart(HttpSession session, Principal principal) {
         CartModel cart = (CartModel) session.getAttribute("cart");
         if (cart != null && !cart.getItems().isEmpty()) {
-            // Convert cart to an order and save it
+            // Convert cart to an order
             OrderModel order = cart.convertToOrder(principal.getName());
-            orderRepository.save(order);
-
+            // Save the order, including order items
+            orderService.saveOrder(order);
             // Clear the cart
             cart.clear();
         }
-        return "redirect:/orders"; // Redirect to the orders page or another appropriate page
+        return "redirect:/orders";
     }
 
     @PostMapping("/declineCart")

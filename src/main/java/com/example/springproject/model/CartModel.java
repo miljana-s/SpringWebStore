@@ -52,6 +52,20 @@ public class CartModel {
         order.setTotalPrice(getTotalPrice());
         order.setStatus(OrderStatusEnum.UNCONFIRMED); // Initially, set it to unconfirmed
         order.setOrderDate(LocalDateTime.now());
+
+        // Create OrderItemModel instances for each cart item and associate them with the order
+        List<OrderItemModel> orderItems = new ArrayList<>();
+        for (CartItemModel cartItem : items) {
+            ProductModel product = cartItem.getProduct();
+            int quantity = cartItem.getQuantity();
+            double price = product.getPrice();
+            OrderItemModel orderItem = new OrderItemModel(order, product, quantity, price);
+            orderItems.add(orderItem);
+        }
+
+        // Set the order items for the order
+        order.setOrderItems(orderItems);
+
         return order;
     }
 

@@ -40,10 +40,10 @@ public class CartController {
             session.setAttribute("cart", cart);
         }
 
-        // Add the product to the cart
+
         cart.addItem(product);
 
-        return "redirect:/products"; // Redirect back to the product page
+        return "redirect:/products";
     }
 
     @GetMapping("/cart")
@@ -60,24 +60,25 @@ public class CartController {
     public String confirmCart(HttpSession session, Principal principal) {
         CartModel cart = (CartModel) session.getAttribute("cart");
         if (cart != null && !cart.getItems().isEmpty()) {
-            // Convert cart to an order and save it
+
             OrderModel order = cart.convertToOrder(principal.getName());
             orderRepository.save(order);
 
-            // Clear the cart
+
             cart.clear();
+
         }
-        return "redirect:/orders"; // Redirect to the orders page or another appropriate page
+        return "redirect:/cart?success=true";
     }
 
     @PostMapping("/declineCart")
     public String declineCart(HttpSession session) {
         CartModel cart = (CartModel) session.getAttribute("cart");
         if (cart != null) {
-            // Clear the cart
+
             cart.clear();
         }
-        return "redirect:/products"; // Redirect to the products page or another appropriate page
+        return "redirect:/products";
     }
 
 }

@@ -9,10 +9,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -95,5 +92,47 @@ public class StoreController {
     }
 
 
+    @GetMapping("/update-product/{id}")
+    public String showUpdateProductForm(
+            @PathVariable("id") Long id,
+            @RequestParam(name = "success", required = false) Boolean success,
+            Model model
+    ) {
+        ProductModel product = storeService.getProductById(id);
+        if (product != null) {
+            model.addAttribute("product", product);
+            List<CategoryModel> categories = storeService.getAllCategories();
+            model.addAttribute("categories", categories);
+
+
+            model.addAttribute("showUpdateMessage", success != null && success);
+
+            return "update-product";
+        } else {
+            return "error";
+        }
+    }
+
+    @PostMapping("/update-product")
+    public String updateProduct(@ModelAttribute ProductModel updatedProduct, Model model) {
+
+        storeService.updateProduct(updatedProduct);
+
+        model.addAttribute("showUpdateMessage", true);
+
+        return "redirect:/update-product/" + updatedProduct.getId() + "?success=true";
+    }
+
+
+    @PostMapping("/delete-product/{id}")
+    public String deleteProduct(@PathVariable("id") Long id, Model model) {
+        storeService.deleteProductById(id);
+
+
+        model.addAttribute("showDeleteMessage", true);
+
+        // Redirect back to the products page with a success message
+        return "redirect:/products?success=true";
+    }
 
 }

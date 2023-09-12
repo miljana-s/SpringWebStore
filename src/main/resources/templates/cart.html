@@ -46,6 +46,9 @@
 <body>
 <!-- CART -->
 <div class="container">
+    <div th:if="${param.success != null}" class="alert alert-success" role="alert">
+        Order sent successfully!
+    </div>
     <section class="h-100 h-custom" style="background-color: #d2c9ff;">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
@@ -167,6 +170,6 @@
         </div>
     </section>
 
-    </div>
+</div>
 </body>
 </html>

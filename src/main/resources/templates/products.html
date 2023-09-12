@@ -12,6 +12,10 @@
     <div class="album py-5 bg-body-tertiary">
         <div class="container">
 
+            <div th:if="${param.success != null}" class="alert alert-success" role="alert">
+                Product deleted successfully!
+            </div>
+
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                 <div class="col" th:each="product : ${product_list}">
                     <div th:if="${product.name != null}" class="card shadow-sm">
@@ -38,6 +42,14 @@
                                         <button type="submit" class="btn btn-sm btn-outline-secondary">View product</button>
                                     </form>
                                 </div>
+                                <div class="btn-group" sec:authorize="hasAuthority('SELLER')">
+                                    <form method="get" th:action="@{/update-product/{id}(id=${product.id})}">
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">Edit Product</button>
+                                    </form>
+                                </div>
+                                <form method="post" sec:authorize="hasAuthority('SELLER')" th:action="@{/delete-product/{id}(id=${product.id})}">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete product</button>
+                                </form>
                                 <p style="color: green; font-size: 20px; font-weight: bold;">
                                     <span th:text="${product.price}"></span>
                                     <span>&#8364;</span>

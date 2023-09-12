@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Login page</title>
@@ -17,7 +18,7 @@
 
     <div class="form">
         <form class="login-form" method="post" th:action="@{/login}" th:object="${loginRequest}">
-            <input type="hidden" th:attr="name='_csrf'" th:value="${_csrf.token}" />
+            <!--            <input type="hidden" th:attr="name='_csrf'" th:value="${_csrf.token}" />-->
             <input type="text" name="username" placeholder="Username"/>
             <input type="password" name="password" placeholder="Password"/>
             <button>log in</button>

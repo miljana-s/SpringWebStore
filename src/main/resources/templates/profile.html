@@ -19,7 +19,7 @@
             Profile updated!
         </div>
         <form action="/profile" method="post" th:object="${userData}">
-            <input type="hidden" th:attr="name='_csrf'" th:value="${_csrf.token}" />
+            <!--<input type="hidden" th:attr="name='_csrf'" th:value="${_csrf.token}" />-->
             <div class="row g-3">
                 <div class="col-sm-6">
                     <label for="firstName" class="form-label">First name</label>

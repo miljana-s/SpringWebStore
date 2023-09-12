@@ -34,8 +34,9 @@
                             <p class="card-text" th:text="${product.name}"></p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                    <form method="get" th:action="@{/products/{id}(id=${product.id})}">
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">View product</button>
+                                    </form>
                                 </div>
                                 <p style="color: green; font-size: 20px; font-weight: bold;">
                                     <span th:text="${product.price}"></span>

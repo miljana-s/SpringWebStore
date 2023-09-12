@@ -52,13 +52,7 @@
                     </a>
 
                     <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
-                        <!--                            <li>-->
-                        <!--                                <a href="#" class="nav-link text-secondary">-->
-                        <!--                                    <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#home"/></svg>-->
-                        <!--                                    Home-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
-                        <li>
+                        <li sec:authorize="hasAuthority('SELLER')">
                             <a href="/add-product" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#plus-square"/></svg>
                                 Add
@@ -70,12 +64,12 @@
                                 Products
                             </a>
                         </li>
-                        <li>
+                        <li sec:authorize="hasAuthority('CUSTOMER')">
                             <a href="/cart" class="nav-link text-white" >
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#cart"/></svg>
                                 Cart
                                 <span class="badge text-bg-light rounded-pill align-text-bottom"
-                                      th:text="${itemsInCart}"></span>
+                                      th:text="${cart.getNumOfAllItems}"></span>
                             </a>
                         </li>
                         <li>
@@ -84,13 +78,13 @@
                                 Orders
                             </a>
                         </li>
-                        <li>
+                        <li sec:authorize="hasAuthority('CUSTOMER')">
                             <a href="/profile" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#people-circle"/></svg>
                                 Profile
                             </a>
                         </li>
-                        <li>
+                        <li sec:authorize="isAuthenticated()">
                             <a href="/logout" class="nav-link text-white">
                                 <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#power"/></svg>
                                 Logout
@@ -109,7 +103,7 @@
                 <div class="text-end">
                     <form action="/logout">
                         <button type="button" class="btn btn-light text-dark me-2">
-                            <!--                                    sec:authorize="isAuthenticated()">-->
+                            <!--sec:authorize="isAuthenticated()">-->
                             Logout
                         </button>
                     </form>

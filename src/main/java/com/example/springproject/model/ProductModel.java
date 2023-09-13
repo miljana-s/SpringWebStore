@@ -22,15 +22,28 @@ public class ProductModel {
     @OneToMany(mappedBy = "product")
     Set<OrderItemModel> orderItems = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name = "stock",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "size_id")
+    )
+    private Set<ProductSizesModel> sizes = new HashSet<>();
+
+    @OneToMany(mappedBy = "product")
+    private Set<StockModel> stock = new HashSet<>();
+
+
     public ProductModel() {
     }
 
-    public ProductModel(String name, String image, float price, CategoryModel category, Set<OrderItemModel> orderItems) {
+    public ProductModel(String name, String image, float price, CategoryModel category, Set<OrderItemModel> orderItems, Set<ProductSizesModel> sizes) {
         this.name = name;
         this.image = image;
         this.price = price;
         this.category = category;
         this.orderItems = orderItems;
+        this.sizes = sizes;
     }
 
     public Long getId() {
@@ -81,18 +94,35 @@ public class ProductModel {
         this.orderItems = orderItems;
     }
 
+    public Set<ProductSizesModel> getSizes() {
+        return sizes;
+    }
+
+    public void setSizes(Set<ProductSizesModel> sizes) {
+        this.sizes = sizes;
+    }
+
+    public Set<StockModel> getStock() {
+        return stock;
+    }
+
+    public void setStock(Set<StockModel> stock) {
+        this.stock = stock;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ProductModel that = (ProductModel) o;
-        return Float.compare(that.price, price) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(image, that.image) && Objects.equals(category, that.category) && Objects.equals(orderItems, that.orderItems);
+        return Float.compare(that.price, price) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(image, that.image) && Objects.equals(category, that.category) && Objects.equals(orderItems, that.orderItems) && Objects.equals(sizes, that.sizes) && Objects.equals(stock, that.stock);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, image, price, category, orderItems);
+        return Objects.hash(id, name, image, price, category, orderItems, sizes, stock);
     }
+
 
     @Override
     public String toString() {
@@ -103,6 +133,18 @@ public class ProductModel {
                 ", price=" + price +
                 ", category=" + category +
                 ", orderItems=" + orderItems +
+                ", sizes=" + sizes +
+                ", stock=" + stock +
                 '}';
     }
+
+    /* public void addSize(ProductSizesModel size) {
+        sizes.add(size);
+        size.getProducts().add(this);
+    }
+
+    public void removeSize(ProductSizesModel size) {
+        sizes.remove(size);
+        size.getProducts().remove(this);
+    }*/
 }

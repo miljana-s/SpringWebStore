@@ -1,14 +1,13 @@
 package com.example.springproject.config;
 
 import com.example.springproject.model.*;
-import com.example.springproject.repository.CategoryRepository;
-import com.example.springproject.repository.ProductRepository;
-import com.example.springproject.repository.UserRepository;
+import com.example.springproject.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import com.example.springproject.repository.RoleRepository;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.stream.Stream;
 
 @Component
@@ -19,16 +18,20 @@ public class InitialDataLoader implements CommandLineRunner {
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductSizesRepository productSizesRepository;
+    private final StockRepository stockRepository;
 
     public InitialDataLoader(
             RoleRepository roleRepository,
             UserRepository userRepository,
             ProductRepository productRepository,
-            CategoryRepository categoryRepository) {
+            CategoryRepository categoryRepository, ProductSizesRepository productSizesRepository, StockRepository stockRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.productSizesRepository = productSizesRepository;
+        this.stockRepository = stockRepository;
     }
 
     @Override
@@ -49,6 +52,13 @@ public class InitialDataLoader implements CommandLineRunner {
                     categoryRepository.save(categoryModel);
                 }
         );
+
+        ProductSizesModel sizeSmall = new ProductSizesModel(SizeEnum.SMALL);
+        ProductSizesModel sizeMedium = new ProductSizesModel(SizeEnum.MEDIUM);
+        ProductSizesModel sizeLarge = new ProductSizesModel(SizeEnum.LARGE);
+
+        productSizesRepository.saveAll(Arrays.asList(sizeSmall, sizeMedium, sizeLarge));
+
         CategoryModel jacketCat = categoryRepository.findByName(CategoryEnum.JACKETS);
         // Add products
         ProductModel jacket1 = new ProductModel(
@@ -56,7 +66,9 @@ public class InitialDataLoader implements CommandLineRunner {
                 "https://m.media-amazon.com/images/I/81rntI+0XHL._AC_UX679_.jpg",
                 120,
                 jacketCat,
-                null
+                null,
+                new HashSet<>(Arrays.asList(sizeSmall, sizeMedium))
+
         );
         productRepository.save(jacket1);
 
@@ -65,7 +77,8 @@ public class InitialDataLoader implements CommandLineRunner {
                 "https://5.imimg.com/data5/SELLER/Default/2021/7/GN/SV/SO/21288657/denim-jacket-1000x1000.jpeg",
                 50,
                 jacketCat,
-                null
+                null,
+                new HashSet<>(Arrays.asList(sizeSmall, sizeMedium, sizeLarge))
         );
         productRepository.save(jacket2);
 
@@ -75,7 +88,8 @@ public class InitialDataLoader implements CommandLineRunner {
                 "https://www.schoolwear.ie/wp-content/uploads/2016/04/White-Shirt.jpg",
                 30,
                 shirtCat,
-                null
+                null,
+                new HashSet<>(Arrays.asList(sizeSmall))
         );
         productRepository.save(shirt);
 
@@ -85,9 +99,27 @@ public class InitialDataLoader implements CommandLineRunner {
                 "https://sonnenswim.com/cdn/shop/products/tshirtnegra1_1024x1024@2x.jpg?v=1656020034",
                 20,
                 tshirtCat,
-                null
+                null,
+                new HashSet<>(Arrays.asList(sizeSmall, sizeMedium, sizeLarge))
         );
         productRepository.save(tshirt);
+
+
+        // Create stock entries for products and sizes
+        createStockEntry(jacket1, sizeSmall, 50);
+        createStockEntry(jacket1, sizeMedium, 30);
+        createStockEntry(jacket2, sizeSmall, 20);
+        createStockEntry(jacket2, sizeMedium, 15);
+        createStockEntry(jacket2, sizeLarge, 10);
+        createStockEntry(shirt, sizeSmall, 40);
+        createStockEntry(tshirt, sizeSmall, 25);
+        createStockEntry(tshirt, sizeMedium, 20);
+        createStockEntry(tshirt, sizeLarge, 15);
+    }
+
+    private void createStockEntry(ProductModel product, ProductSizesModel size, int quantity) {
+        StockModel stock = new StockModel(product, size, quantity);
+        stockRepository.save(stock);
     }
 
     private void loadUser() {

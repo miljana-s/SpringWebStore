@@ -1,11 +1,14 @@
 package com.example.springproject.service;
 
+import com.example.springproject.model.CartModel;
 import com.example.springproject.model.CategoryModel;
 import com.example.springproject.model.ProductModel;
 import com.example.springproject.repository.CategoryRepository;
 import com.example.springproject.repository.ProductRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import java.util.List;
 
@@ -68,5 +71,14 @@ public class StoreService {
     public List<ProductModel> getProductByCategory(CategoryModel category) {
         return productRepository.findAllByCategory(category);
     }
+
+    public static void addSessionCartToModel(Model model, HttpSession session){
+        CartModel cart = (CartModel) session.getAttribute("cart");
+        if (cart == null) {
+                cart = new CartModel();
+        }
+        model.addAttribute("cart", cart);
+    }
+
 
 }

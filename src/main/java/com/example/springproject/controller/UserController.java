@@ -2,6 +2,9 @@ package com.example.springproject.controller;
 
 import com.example.springproject.model.CartModel;
 import com.example.springproject.model.UserModel;
+import com.example.springproject.model.UserModelDTO;
+import com.example.springproject.model.UserModelMapper;
+import com.example.springproject.service.StoreService;
 import com.example.springproject.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -39,7 +42,7 @@ public class UserController {
         return "login";
     }
 
-    @PostMapping("/register")
+    @PostMapping("/login-process")
     public String register(@ModelAttribute UserModel userModel, Model model){
         UserModel registeredUser =
                 userService.registerUser(
@@ -66,8 +69,6 @@ public class UserController {
     public String login(@ModelAttribute UserModel userModel, Model model){
         UserModel authenticated = userService.authenticate(userModel.getUsername(), userModel.getPassword());
         if (authenticated != null ){
-            // model.addAttribute("userLogin", authenticated.getUsername()); --> <span th:text="${userLogin}"></span>
-            // Determine the user's role and redirect accordingly
             if (authenticated.getRoles().stream().anyMatch(role -> role.getName().equals("SELLER"))) {
                 return "products";
             } else if (authenticated.getRoles().stream().anyMatch(role -> role.getName().equals("CUSTOMER"))) {
@@ -84,47 +85,33 @@ public class UserController {
     public String getProfilePage(Model model, HttpSession session){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserModel existingUser = (UserModel)authentication.getPrincipal();
-        UserModel clonedUser = new UserModel(
-                existingUser.getId(),
-                existingUser.getFirstName(),
-                existingUser.getLastName(),
-                null,
-                null,
-                existingUser.getEmail(),
-                existingUser.getPhone(),
-                existingUser.getAddress(),
-                existingUser.getCity(),
-                null
-        );
-        model.addAttribute("userData", clonedUser);
-        CartModel cart = (CartModel) session.getAttribute("cart");
-        if (cart == null) {
-                cart = new CartModel();
-        }
-        model.addAttribute("cart", cart);
+        UserModelDTO userDTO = UserModelMapper.toDTO(userService.findById(existingUser.getId()));
+        model.addAttribute("userData", userDTO);
+        StoreService.addSessionCartToModel(model, session);
         return "profile";
     }
 
     @PostMapping("/profile")
-    public String updateProfile(@ModelAttribute UserModel updatedUserModel, Model model){
+    public String updateProfile(@ModelAttribute UserModelDTO updatedUserModel, Model model, HttpSession session){
         // 1. Get existing user
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserModel existingUser = (UserModel) authentication.getPrincipal();
 
         // 2. Try ti update user
-        updatedUserModel.setId(existingUser.getId());
-        UserModel newUser = userService.updateUser(updatedUserModel);
+        boolean is_user_updated = userService.updateUser(updatedUserModel);
 
         // 3. Display related message
-        if (newUser != null) {
+        if (is_user_updated) {
+            UserModel user = userService.findById(existingUser.getId());
             model.addAttribute("showSuccMsg", true);
-            model.addAttribute("userData", newUser);
+            model.addAttribute("userData", user);
         }
         else {
             model.addAttribute("showWarnMsg", true);
             model.addAttribute("userData", existingUser);
         }
 
+        StoreService.addSessionCartToModel(model, session);
         return "profile";
     }
 

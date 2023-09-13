@@ -4,6 +4,7 @@ import com.example.springproject.model.CartModel;
 import com.example.springproject.model.OrderModel;
 import com.example.springproject.model.OrderStatusEnum;
 import com.example.springproject.repository.OrderRepository;
+import com.example.springproject.service.StoreService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -26,15 +27,13 @@ public class OrderController {
 
     @GetMapping("/orders")
     public String listOrders(Model model, HttpSession session) {
-        CartModel cart = (CartModel) session.getAttribute("cart");
-        if (cart == null) {
-                cart = new CartModel();
-            }
-        model.addAttribute("cart", cart);
+
         List<OrderModel> orders = orderRepository.findAll();
         model.addAttribute("orders", orders);
+        StoreService.addSessionCartToModel(model, session);
         return "orders";
     }
+
 
     @PostMapping("/confirmOrder/{orderId}")
     public String confirmOrder(@PathVariable("orderId") Long orderId) {

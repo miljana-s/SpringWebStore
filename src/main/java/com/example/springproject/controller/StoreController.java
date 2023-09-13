@@ -35,13 +35,8 @@ public class StoreController {
     @GetMapping("/products")
     public String getProductsPage(Model model, HttpSession session){
         model.addAttribute("product_list", this.storeService.getAllProducts());
-        CartModel cart = (CartModel) session.getAttribute("cart");
-        if (cart == null) {
-            cart = new CartModel();
-            session.setAttribute("cart", cart);
-        }
-        model.addAttribute("cart", cart );
         model.addAttribute("categories", this.categoryRepository.findAll());
+        StoreService.addSessionCartToModel(model, session);
         return "products";
     }
 
@@ -50,13 +45,8 @@ public class StoreController {
     public String viewProductDetails(@PathVariable("id") Long id, Model model, HttpSession session) {
         ProductModel product = storeService.getProductById(id);
         if (product != null) {
-            CartModel cart = (CartModel) session.getAttribute("cart");
-            if (cart == null) {
-                    cart = new CartModel();
-                    session.setAttribute("cart", cart);
-                }
-            model.addAttribute("cart", cart);
             model.addAttribute("selectedProduct", product);
+            StoreService.addSessionCartToModel(model, session);
             return "product-overview";
         } else {
 
@@ -141,29 +131,19 @@ public class StoreController {
     public String searchTerm(Model model, HttpSession session,  @RequestParam("term") String keyword) {
         List<ProductModel> listProducts = storeService.searchProducts(keyword);
         model.addAttribute("product_list", listProducts);
-        CartModel cart = (CartModel) session.getAttribute("cart");
-        if (cart == null) {
-                cart = new CartModel();
-                session.setAttribute("cart", cart);
-            }
-        model.addAttribute("cart", cart);
+        StoreService.addSessionCartToModel(model, session);
         return "products";
     }
 
 
-            @GetMapping("/products-type/{id}")
+    @GetMapping("/products-type/{id}")
     public String viewProductByType(@PathVariable("id") Long id, Model model, HttpSession session) {
         Optional<CategoryModel> category = categoryRepository.findById(id);
         if (category.isPresent()){
                 List<ProductModel> products = storeService.getProductByCategory(category.get());
                 if (products != null) {
                         model.addAttribute("product_list", products);
-                        CartModel cart = (CartModel) session.getAttribute("cart");
-                        if (cart == null) {
-                                cart = new CartModel();
-                                session.setAttribute("cart", cart);
-                            }
-                        model.addAttribute("cart", cart);
+                        StoreService.addSessionCartToModel(model, session);
                         model.addAttribute("categories", categoryRepository.findAll());
                         return "products";
                     }

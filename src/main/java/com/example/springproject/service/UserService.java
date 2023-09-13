@@ -2,6 +2,8 @@ package com.example.springproject.service;
 
 import com.example.springproject.model.RoleModel;
 import com.example.springproject.model.UserModel;
+import com.example.springproject.model.UserModelDTO;
+import com.example.springproject.model.UserModelMapper;
 import com.example.springproject.repository.RoleRepository;
 import com.example.springproject.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,37 +68,18 @@ public class UserService {
     }
 
 //    @Transactional
-    public UserModel updateUser(UserModel updatedUserModel) {
+        public boolean updateUser(UserModelDTO updatedUserModel) {
         UserModel existingUser = userRepository.findById(updatedUserModel.getId()).orElseThrow(
                 () -> new IllegalStateException("User with id " + updatedUserModel.getId() + " not exists!")
         );
-        boolean anyFieldChanged = false;
-        if (!existingUser.getFirstName().equals(updatedUserModel.getFirstName())){
-            existingUser.setFirstName(updatedUserModel.getFirstName());
-            anyFieldChanged = true;
+        UserModelDTO existingUserDTO = UserModelMapper.toDTO(existingUser);
+        if (!existingUserDTO.equals(updatedUserModel)){
+                UserModelMapper.toEntity(updatedUserModel, existingUser);
+                userRepository.save(existingUser);
+                return true;
         }
-        if (!existingUser.getLastName().equals(updatedUserModel.getLastName())){
-            existingUser.setLastName(updatedUserModel.getLastName());
-            anyFieldChanged = true;
-        }
-        if (!existingUser.getEmail().equals(updatedUserModel.getEmail())){
-            existingUser.setEmail(updatedUserModel.getEmail());
-            anyFieldChanged = true;
-        }
-        if (!existingUser.getPhone().equals(updatedUserModel.getPhone())){
-            existingUser.setPhone(updatedUserModel.getPhone());
-            anyFieldChanged = true;
-        }
-        if (!existingUser.getAddress().equals(updatedUserModel.getAddress())){
-            existingUser.setAddress(updatedUserModel.getAddress());
-            anyFieldChanged = true;
-        }
-        if (!existingUser.getCity().equals(updatedUserModel.getCity())){
-            existingUser.setCity(updatedUserModel.getCity());
-            anyFieldChanged = true;
-        }
-        userRepository.save(existingUser);
-        return anyFieldChanged? existingUser : null;
+
+        return false;
     }
 
 
@@ -104,4 +87,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    public UserModel findById(Long id) {
+        return userRepository.findById(id).get();
+    }
 }

@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                        .requestMatchers("/", "/index", "/register", "/login").permitAll()
+                        .requestMatchers("/", "/index", "/register", "/login", "/login-process").permitAll()
                         .requestMatchers("/products", "/products-search**","/products-type/**").hasAnyAuthority("CUSTOMER", "SELLER")
                         .requestMatchers("/profile**", "/cart", "/addToCart", "/confirmCart", "/declineCart").hasAuthority("CUSTOMER")
                         .requestMatchers( "/orders","/add-product","/confirmOrder/{orderId}", "/declineOrder/{orderId}, /update-product, /update-product/{id}").hasAuthority("SELLER")

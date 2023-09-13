@@ -42,7 +42,7 @@ public class UserController {
         return "login";
     }
 
-    @PostMapping("/login-process")
+    @PostMapping("/register")
     public String register(@ModelAttribute UserModel userModel, Model model){
         UserModel registeredUser =
                 userService.registerUser(

@@ -1,5 +1,6 @@
 package com.example.springproject.controller;
 
+import com.example.springproject.model.CartItemModel;
 import com.example.springproject.model.CartModel;
 import com.example.springproject.model.OrderModel;
 import com.example.springproject.model.ProductModel;
@@ -9,9 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -81,4 +80,57 @@ public class CartController {
         return "redirect:/products";
     }
 
+    @RequestMapping("/removeItem/{id}")
+    public String removeCartItem(@PathVariable("id") Long id, Model model, HttpSession session) {
+        CartModel cart = (CartModel) session.getAttribute("cart");
+        if (cart != null) {
+            cart.getItems().removeIf(cartItemModel -> cartItemModel.getProduct().getId() == id);
+        }
+        else {
+            cart = new CartModel();
+        }
+        model.addAttribute("cart", cart);
+        return "cart";
+}
+
+    @RequestMapping("/increaseItem/{id}")
+    public String increaseCartItem(@PathVariable("id") Long id, Model model, HttpSession session) {
+        CartModel cart = (CartModel) session.getAttribute("cart");
+        if (cart != null) {
+            for (CartItemModel cartItem: cart.getItems()){
+                    if (cartItem.getProduct().getId() == id){
+                            int q = cartItem.getQuantity();
+                            cartItem.setQuantity(q + 1);
+                            break;
+                    }
+            }
+        }
+        else {
+            cart = new CartModel();
+        }
+        model.addAttribute("cart", cart);
+        return "cart";
+    }
+
+    @RequestMapping("/decreseItem/{id}")
+    public String decreseCartItem(@PathVariable("id") Long id, Model model, HttpSession session) {
+        CartModel cart = (CartModel) session.getAttribute("cart");
+        if (cart != null) {
+            for (CartItemModel cartItem: cart.getItems()){
+                if (cartItem.getProduct().getId() == id){
+                    int q = cartItem.getQuantity();
+                    cartItem.setQuantity(q - 1);
+                    if (cartItem.getQuantity() == 0){
+                            cart.getItems().remove(cartItem);
+                        }
+                    break;
+                }
+            }
+        }
+        else {
+            cart = new CartModel();
+        }
+        model.addAttribute("cart", cart);
+        return "cart";
+    }
 }

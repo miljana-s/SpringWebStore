@@ -40,6 +40,13 @@
                     border-bottom-right-radius: 16px;
                 }
             }
+        body {
+            background: #e4e4e4;
+            background: linear-gradient(90deg, #e4e4e4 0%, rgba(58, 136, 172, 0.73) 100%);
+            font-family: "Roboto", sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
     </style>
 </head>
 <div th:replace="header :: default-header"></div>
@@ -78,18 +85,15 @@
                                                 </div>
                                                 <!-- Quantity -->
                                                 <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                                    <button class="btn btn-link px-2"
-                                                            onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                                                        <i class="fas fa-minus"></i>
-                                                    </button>
+                                                    <a class="btn btn-link px-2" th:href="@{/decreseItem/{id}(id=${cartItem.product.id})}">
+                                                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#minus"/></svg>
+                                                    </a>
 
-                                                    <input id="form1" min="0" name="quantity" th:value="${cartItem.getQuantity}" type="number"
-                                                           class="form-control form-control-sm" />
+                                                    <h4 th:text="${cartItem.getQuantity}" > </h4>
 
-                                                    <button class="btn btn-link px-2"
-                                                            onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                                                        <i class="fas fa-plus"></i>
-                                                    </button>
+                                                    <a class="btn btn-link px-2" th:href="@{/increaseItem/{id}(id=${cartItem.product.id})}">
+                                                        <svg class="bi d-block mx-auto mb-1" width="24" height="24"><use xlink:href="#plus"/></svg>
+                                                    </a>
                                                 </div>
                                                 <!-- Price -->
                                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
@@ -97,7 +101,7 @@
                                                 </div>
                                                 <!-- Delete item -->
                                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                                    <a href="" class="text-muted"><i class="fas fa-times">X</i></a>
+                                                    <a th:href="@{/removeItem/{id}(id=${cartItem.product.id})}" class="text-muted">X</a>
                                                 </div>
                                             </div>
                                             <hr class="my-4">
@@ -147,7 +151,7 @@
                                         </div>
 
                                         <div class="d-flex justify-content-between mb-5">
-                                            <form method="post"th:action="@{/confirmCart}">
+                                            <form method="post" th:action="@{/confirmCart}">
                                                 <button type="submit" class="btn btn-dark btn-block btn-lg">SEND ORDER</button>
                                             </form>
                                             <form method="post" th:action="@{/declineCart}">

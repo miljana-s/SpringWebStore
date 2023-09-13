@@ -15,7 +15,7 @@
     </div>
 
     <div class="form">
-        <form method="post" action="/login-process" th:object="${registerRequest}">
+        <form method="post" action="/register" th:object="${registerRequest}">
             <!--<input type="hidden" th:attr="name='_csrf'" th:value="${_csrf.token}" />-->
             <input type="text" required name="firstName" placeholder="First name"/>
             <input type="text" required name="lastName" placeholder="Last name"/>

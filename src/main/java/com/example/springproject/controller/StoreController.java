@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Controller
@@ -40,6 +41,7 @@ public class StoreController {
             session.setAttribute("cart", cart);
         }
         model.addAttribute("cart", cart );
+        model.addAttribute("categories", this.categoryRepository.findAll());
         return "products";
     }
 
@@ -133,6 +135,40 @@ public class StoreController {
 
         // Redirect back to the products page with a success message
         return "redirect:/products?success=true";
+    }
+
+    @RequestMapping("/products-search")
+    public String searchTerm(Model model, HttpSession session,  @RequestParam("term") String keyword) {
+        List<ProductModel> listProducts = storeService.searchProducts(keyword);
+        model.addAttribute("product_list", listProducts);
+        CartModel cart = (CartModel) session.getAttribute("cart");
+        if (cart == null) {
+                cart = new CartModel();
+                session.setAttribute("cart", cart);
+            }
+        model.addAttribute("cart", cart);
+        return "products";
+    }
+
+
+            @GetMapping("/products-type/{id}")
+    public String viewProductByType(@PathVariable("id") Long id, Model model, HttpSession session) {
+        Optional<CategoryModel> category = categoryRepository.findById(id);
+        if (category.isPresent()){
+                List<ProductModel> products = storeService.getProductByCategory(category.get());
+                if (products != null) {
+                        model.addAttribute("product_list", products);
+                        CartModel cart = (CartModel) session.getAttribute("cart");
+                        if (cart == null) {
+                                cart = new CartModel();
+                                session.setAttribute("cart", cart);
+                            }
+                        model.addAttribute("cart", cart);
+                        model.addAttribute("categories", categoryRepository.findAll());
+                        return "products";
+                    }
+            }
+        return "error";
     }
 
 }

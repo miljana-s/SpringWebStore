@@ -7,10 +7,48 @@
     <title>Products page</title>
 </head>
 <div th:replace="header :: default-header"></div>
+<style>
+    body {
+        background: #e4e4e4;
+        background: linear-gradient(90deg, #e4e4e4 0%, rgba(58, 136, 172, 0.73) 100%);
+        font-family: "Roboto", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+</style>
 <body>
 <div class="container">
-    <div class="album py-5 bg-body-tertiary">
-        <div class="container">
+    <!--  SEARCH AND FILTERS  -->
+        <div class="px-3 py-2 border-bottom mb-3">
+            <div class="container d-flex flex-wrap justify-content-center">
+    <!--            SEARCH-->
+                <form class="col-12 col-lg-auto mb-2 mb-lg-0 me-lg-auto" th:action="@{/products-search}">
+                    <input class="form-control" placeholder="Search By Name" aria-label="Search"
+                           type="text" name="term" id="term" th:value="${term}" required>
+                </form>
+    <!--            FILTER-->
+                <div class="dropdown top-box animatedq fadeInDownq clearfix">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Category
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item"
+                               th:each="cat : ${categories}"
+                               th:href="@{/products-type/{id}(id=${cat.id})}"
+                               th:text="${cat.name}" th:value="${cat.id}"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!--  PRODUCTS  -->
+        <div class="album py-5 bg-body-tertiary" style="position:relative; z-index: 0;" th:if="${product_list} != null" >
+            <div class="container">
+                <!--  NO PRODUCTS MESSAGE  -->
+                <div th:if="${product_list.isEmpty}">
+                    <h1>Products not found...</h1>
+                </div>
 
             <div th:if="${param.success != null}" class="alert alert-success" role="alert">
                 Product deleted successfully!

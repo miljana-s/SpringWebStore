@@ -58,4 +58,15 @@ public class StoreService {
         productRepository.deleteById(id);
     }
 
+    public List<ProductModel> searchProducts(String keyword) {
+        if (keyword != null) {
+                return this.productRepository.search(keyword);
+            }
+        return getAllProducts();
+    }
+
+    public List<ProductModel> getProductByCategory(CategoryModel category) {
+        return productRepository.findAllByCategory(category);
+    }
+
 }

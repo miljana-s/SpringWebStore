@@ -50,7 +50,7 @@
                                 </span>
                             </div>
                             <hr class="my-4">
-                            <div class="btn-group d-flex justify-content-center">
+                            <div class="btn-group d-flex justify-content-center" sec:authorize="hasAuthority('CUSTOMER')">
                                 <form th:action="@{/addToCart}" method="post">
                                     <input type="hidden" name="productId" th:value="${selectedProduct.id}" />
                                     <button type="submit" class="btn btn-sm btn-outline-secondary">Add to Cart</button>
